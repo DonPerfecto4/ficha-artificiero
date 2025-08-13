@@ -455,42 +455,61 @@
   </main>
 
   <script>
-    // Partículas aleatorias en la pieza central (decorativas)
-    (function(){
-      const wrap = document.querySelector('.particles');
-      if(!wrap) return;
-      const W = wrap.offsetWidth || 360; const H = wrap.offsetHeight || 360;
-      const COUNT = 32;
-      for(let i=0;i<COUNT;i++){
-        const d = document.createElement('div');
-        d.className = 'particle';
-        d.style.left = Math.random()*W + 'px';
-        d.style.bottom = (-40 + Math.random()*40) + 'px';
-        d.style.animationDelay = (Math.random()*12)+'s';
-        d.style.opacity = Math.random()*0.8 + 0.2;
-        wrap.appendChild(d);
-      }
-    })();
+  // Partículas aleatorias en la pieza central (decorativas)
+  (function(){
+    const wrap = document.querySelector('.particles');
+    if(!wrap) return;
+    const W = wrap.offsetWidth || 360; const H = wrap.offsetHeight || 360;
+    const COUNT = 32;
+    for(let i=0;i<COUNT;i++){
+      const d = document.createElement('div');
+      d.className = 'particle';
+      d.style.left = Math.random()*W + 'px';
+      d.style.bottom = (-40 + Math.random()*40) + 'px';
+      d.style.animationDelay = (Math.random()*12)+'s';
+      d.style.opacity = Math.random()*0.8 + 0.2;
+      wrap.appendChild(d);
+    }
+  })();
 
-    // Animación suave para <details> usando altura medida
-    document.querySelectorAll('details').forEach(d => {
-      const wrap = d.querySelector('.anim-wrap');
-      if(!wrap) return;
-      d.addEventListener('toggle', () => {
-        const inner = wrap.firstElementChild;
-        if(d.open){
-          wrap.style.height = 'auto';
-          const h = wrap.clientHeight + 'px';
+  // Animación suave para <details> al abrir y cerrar
+  document.querySelectorAll('details').forEach(details => {
+    const wrap = details.querySelector('.anim-wrap');
+    if (!wrap) return;
+
+    // Guardar el summary para interceptar el click
+    const summary = details.querySelector('summary');
+    let closing = false;
+
+    summary.addEventListener('click', function(e) {
+      // Si está abierto y no está cerrando, animar el cierre
+      if (details.open && !closing) {
+        e.preventDefault(); // Evita el cierre inmediato
+        closing = true;
+        wrap.style.height = wrap.clientHeight + 'px';
+        requestAnimationFrame(() => {
           wrap.style.height = '0px';
-          requestAnimationFrame(() => { wrap.style.height = h; });
-          setTimeout(() => { wrap.style.height = 'auto'; }, 380);
-        } else {
-          const h = wrap.clientHeight + 'px';
-          wrap.style.height = h;
-          requestAnimationFrame(() => { wrap.style.height = '0px'; });
-        }
-      });
+        });
+        // Espera la transición antes de cerrar el details
+        setTimeout(() => {
+          details.open = false;
+          closing = false;
+        }, 380); // Tiempo igual al de la transición
+      }
+      // Si está cerrado, deja que se abra normalmente
     });
-  </script>
+
+    // Animación al abrir (igual que antes)
+    details.addEventListener('toggle', () => {
+      if (details.open && !closing) {
+        wrap.style.height = 'auto';
+        const h = wrap.clientHeight + 'px';
+        wrap.style.height = '0px';
+        requestAnimationFrame(() => { wrap.style.height = h; });
+        setTimeout(() => { wrap.style.height = 'auto'; }, 380);
+      }
+    });
+  });
+</script>
 </body>
 </html>
