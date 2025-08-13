@@ -8,254 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
-    :root{
-      --bg:#0b0d0f;
-      --bg-2:#111416;
-      --fg:#dfe7e3;
-      --muted:#a9b3ad;
-      --accent:#2f8f5b;
-      --accent-2:#1c5537;
-      --edge:#1a1f1c;
-      --glow: 0 0 18px rgba(47,143,91,.45);
-      --shadow: 0 10px 30px rgba(0,0,0,.55);
-      --radius:18px;
-      --pad:22px;
-      --gap:34px;
-      --trans: 260ms cubic-bezier(.22,.61,.36,1);
-    }
-    html,body{height:100%; margin:0;}
-    body{
-      background: radial-gradient(1200px 800px at 50% -10%, #1a2224 0%, var(--bg) 55%) fixed;
-      color:var(--fg);
-      font-family: 'IM Fell English SC', serif;
-      letter-spacing:.2px;
-      display:flex; flex-direction:column; align-items:center;
-      overflow-x:hidden;
-      min-height:100vh;
-    }
-    header{
-      width:min(1200px, 92vw);
-      padding:40px 0 12px;
-      text-align:center;
-      border-bottom: 1px solid #222e26;
-      margin-bottom:18px;
-    }
-    h1{
-      font-family:'UnifrakturMaguntia', cursive;
-      font-weight:400;
-      margin:0 0 8px;
-      font-size: clamp(38px, 5vw, 62px);
-      color:#e6fff0;
-      text-shadow: 0 0 16px rgba(47,143,91,.35), 0 0 4px #0a0;
-      letter-spacing:2px;
-    }
-    .subtitle{
-      color:var(--muted); opacity:.92;
-      font-size:clamp(14px, 1.8vw, 16px);
-      margin-bottom:18px;
-      display:block;
-    }
-    .grid{
-      width:min(1200px, 92vw);
-      display:grid;
-      grid-template-columns: 1fr minmax(280px, 360px) 1fr;
-      grid-template-areas:
-        "raza   skull   lore"
-        "clase  skull   subclase"
-        "hechi  skull   infus";
-      gap: var(--gap);
-      align-items:start;
-      padding: 22px 0 64px;
-    }
-    .skull-box{
-      grid-area: skull;
-      position:relative;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      z-index:1;
-    }
-    .skull{
-      background: radial-gradient(50% 50% at 50% 50%, rgba(47,143,91,.13), rgba(0,0,0,.0) 70%);
-      display:flex; align-items:center; justify-content:center;
-      padding: 24px;
-      border-radius: var(--radius);
-      border:1px solid var(--edge);
-      box-shadow: var(--shadow), 0 0 40px rgba(47,143,91,.11);
-      min-width:340px;
-      min-height:340px;
-    }
-    .skull svg{
-      width:min(100%, 360px); height:auto;
-      filter: drop-shadow(0 0 16px rgba(47,143,91,.28));
-      transition: filter .2s;
-    }
-    .pulse{animation: pulse 3.8s ease-in-out infinite; transform-origin:center;}
-    @keyframes pulse{
-      0%,100%{filter: drop-shadow(0 0 8px rgba(47,143,91,.29));}
-      50%{filter: drop-shadow(0 0 22px rgba(47,143,91,.5));}
-    }
-    .gear-slow{ animation: spin 28s linear infinite; transform-origin:center; }
-    .gear-fast{ animation: spin 12s linear infinite reverse; transform-origin:center; }
-    @keyframes spin{ from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
-    .particles{
-      position:absolute;
-      inset:-20px;
-      pointer-events:none;
-      overflow:hidden;
-      z-index:0;
-    }
-    .particle{
-      position:absolute;
-      width:2.2px; height:2.2px;
-      background:rgba(179,255,220,.78);
-      border-radius:50%;
-      filter: blur(.5px);
-      animation: float 12s linear infinite;
-      opacity:.7;
-    }
-    @keyframes float{
-      from{ transform: translateY(22px); opacity:.0;}
-      10%{opacity:.6;}
-      to{ transform: translateY(-540px); opacity:0;}
-    }
-    /* MODAL BUTTONS */
-    .modal-lista {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      justify-content: center;
-      margin-bottom: 16px;
-      margin-top: 8px;
-    }
-    .modal-btn {
-      background: rgba(47,143,91,0.17);
-      color: #dff5ea;
-      border: none;
-      border-radius: 9px;
-      padding: 14px 22px;
-      font-size: 1.09em;
-      font-weight: 600;
-      box-shadow: 0 2px 12px #1a3125a1;
-      cursor: pointer;
-      transition: background 0.12s, box-shadow 0.12s;
-      margin-bottom: 4px;
-    }
-    .modal-btn:hover {
-      background: rgba(47,143,91,0.28);
-      box-shadow: 0 4px 18px #1a3125c6;
-    }
-    /* MODAL OVERLAY */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      z-index: 98;
-      left: 0; top: 0; right: 0; bottom: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(20,32,24,0.82);
-      backdrop-filter: blur(5px);
-      animation: fadeIn 0.25s;
-    }
-    .modal-overlay.active {
-      display: block;
-      animation: fadeIn 0.22s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    /* MODAL WINDOW */
-    .modal-window {
-      position: fixed;
-      z-index: 99;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(27,33,32,0.97);
-      color: #dff5ea;
-      border-radius: 16px;
-      box-shadow: 0 4px 32px #2f8f5b4a;
-      width: min(700px, 92vw);
-      max-height: 80vh;
-      overflow-y: auto;
-      padding: 36px 32px 32px 32px;
-      display: none;
-      animation: modalSlide 0.22s;
-    }
-    .modal-window.active {
-      display: block;
-      animation: modalSlide 0.22s;
-    }
-    @keyframes modalSlide {
-      from { opacity: 0; transform: translate(-50%, -62%);}
-      to { opacity: 1; transform: translate(-50%, -50%);}
-    }
-    .modal-close {
-      position: absolute;
-      top: 12px; right: 20px;
-      font-size: 2.2em;
-      color: #dff5ea;
-      cursor: pointer;
-      background: none;
-      border: none;
-      opacity: 0.6;
-      transition: opacity 0.17s;
-      z-index: 101;
-    }
-    .modal-close:hover {
-      opacity: 1;
-      color: #f06d6d;
-    }
-    .modal-window::-webkit-scrollbar {
-      width: 7px;
-      background: #26342d;
-      border-radius: 8px;
-    }
-    .modal-window::-webkit-scrollbar-thumb {
-      background: #2f8f5b;
-      border-radius: 8px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 12px;
-      font-size: 0.95em;
-      background: rgba(27,33,32,0.92);
-      border-radius: 10px;
-      box-shadow: 0 2px 14px rgba(47,143,91,0.09);
-      border:1px solid #222e26;
-    }
-    th, td {
-      padding: 7px 8px;
-      border-bottom: 1px solid #2f8f5b;
-    }
-    thead tr {
-      background: rgba(47,143,91,0.13);
-      color: #dff5ea;
-    }
-    h4 {
-      margin-top: 0;
-      margin-bottom: 4px;
-      color: #dff5ea;
-      font-size: 1.18em;
-    }
-    ul {padding-left: 20px;}
-    small {color: #a9b3ad;}
-    @media (max-width: 980px){
-      .grid{
-        grid-template-columns: 1fr;
-        grid-template-areas: "skull" "raza" "lore" "clase" "subclase" "hechi" "infus";
-        padding:12px 0 44px;
-      }
-      .skull{min-width:220px; min-height:220px;}
-      header{padding:28px 0 10px;}
-    }
-    @media (max-width:640px){
-      .panel{padding:0;}
-      .skull{padding:10px;}
-      h1{font-size:2.4em;}
-      .panel .body{font-size:1em;}
-      .modal-window{padding:24px 9px 20px 9px;}
-    }
+    /* ... (igual que antes, todo el CSS) ... */
+    /* [el CSS es igual al que ya tienes, no lo repito aquí para ahorrar espacio] */
   </style>
 </head>
 <body>
@@ -274,49 +28,10 @@
   </div>
   <main class="grid">
     <section class="skull-box">
+      <!-- [SVG de calavera, igual que antes] -->
       <div class="panel skull">
         <div class="particles" aria-hidden="true"></div>
-        <svg viewBox="0 0 520 520" role="img" aria-label="Calavera con engranajes">
-          <defs>
-            <linearGradient id="gMetal" x1="0" x2="1">
-              <stop offset="0%" stop-color="#9db7a9"/>
-              <stop offset="50%" stop-color="#edf7f0"/>
-              <stop offset="100%" stop-color="#708a7b"/>
-            </linearGradient>
-            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#62d69b"/>
-              <stop offset="60%" stop-color="#2f8f5b"/>
-              <stop offset="100%" stop-color="#0b261a"/>
-            </radialGradient>
-          </defs>
-          <path class="pulse" d="M260 50c-100 0-180 80-180 180s80 180 180 180 180-80 180-180-80-180-180-180z" fill="url(#gMetal)" fill-opacity="0.95" stroke="#1b2a24" stroke-width="6" />
-          <circle cx="210" cy="220" r="36" fill="url(#eyeGlow)" />
-          <circle cx="310" cy="220" r="36" fill="url(#eyeGlow)" />
-          <path d="M260 260 l-20 30 h40 z" fill="#0e241b" />
-          <rect x="200" y="310" width="120" height="26" rx="4" fill="#0e241b" />
-          <g fill="#cfe3d7">
-            <rect x="206" y="312" width="12" height="22" rx="2"/>
-            <rect x="224" y="312" width="12" height="22" rx="2"/>
-            <rect x="242" y="312" width="12" height="22" rx="2"/>
-            <rect x="260" y="312" width="12" height="22" rx="2"/>
-            <rect x="278" y="312" width="12" height="22" rx="2"/>
-            <rect x="296" y="312" width="12" height="22" rx="2"/>
-          </g>
-          <g class="gear-slow" transform="translate(380,150)">
-            <circle r="46" fill="#1c5537" stroke="#2f8f5b" stroke-width="6"/>
-            <circle r="18" fill="#0b261a" stroke="#2f8f5b" stroke-width="4"/>
-          </g>
-          <g class="gear-fast" transform="translate(360,240)">
-            <circle r="28" fill="#0f2f22" stroke="#2f8f5b" stroke-width="5"/>
-            <circle r="12" fill="#0b261a" stroke="#2f8f5b" stroke-width="3"/>
-          </g>
-          <g class="gear-slow" transform="translate(140,120)">
-            <circle r="22" fill="#1c5537" stroke="#2f8f5b" stroke-width="4"/>
-          </g>
-          <g class="gear-fast" transform="translate(400,320)">
-            <circle r="18" fill="#0f2f22" stroke="#2f8f5b" stroke-width="3"/>
-          </g>
-        </svg>
+        <!-- ... tu SVG ... -->
       </div>
     </section>
   </main>
@@ -326,6 +41,7 @@
     <div id="modalContent"></div>
   </div>
   <script>
+    // Partículas decorativas
     (function(){
       const wrap = document.querySelector('.particles');
       if(!wrap) return;
@@ -341,6 +57,8 @@
         wrap.appendChild(d);
       }
     })();
+
+    // MODAL CONTENIDOS: ¡todo el HTML integrado aquí!
     const modalContents = {
       raza: `<div class="body"><h4 style="margin-top:0;">Alineación y comportamiento</h4>
       <strong>Alineación:</strong> Caótico Malvado – Vive sin leyes ni moral ajena, guiado solo por interés propio y placer, sin reparos en dañar o matar.<br><br>
@@ -368,22 +86,649 @@
       Veythar no es un héroe ni un villano: es un contratista del caos. Sus trabajos a veces favorecen a un bando, otras veces al contrario, pero casi siempre solo le benefician a él. Para Veythar, el mundo —vivo o muerto— no es más que un tablero de tiro… y él siempre dispara primero.
       <hr><h4>Aspecto y trasfondo</h4>
       <p>Fisionomía, marcas, equipo icónico, creencias y metas ocultas.</p></div>`,
+      // ----- CLASE -----
       clase: `<div class="body">
-        <!-- Tu bloque de clase queda igual que el que tenías en el panel #clase -->
-        ${document.querySelector('body').innerHTML.match(/<section id="clase"[^>]*>[\s\S]*?<\/section>/)?.[0].replace(/<section[^>]*>|<\/section>/g,'').replace(/<div class="head">[\s\S]*?<\/div>/,'')}
-      </div>`,
+  <h4 style="margin-top:0;">⚔️ Clase</h4>
+  <div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.92em; background:rgba(27,33,32,0.92); border-radius:12px; box-shadow: 0 2px 14px rgba(47,143,91,0.09); border:1px solid #222e26;">
+        <thead>
+          <tr style="background:rgba(47,143,91,0.12); color:#dff5ea;">
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Bonif. competencia</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Rasgos</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Infusiones conocidas</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Objetos infundidos</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Cantrips</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel 1</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel 2</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel 3</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel 4</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>+2</td><td>Magical Tinkering, Spellcasting</td><td>-</td><td>-</td><td>2</td><td>2</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>2</td><td>+2</td><td>Infuse Item</td><td>4</td><td>2</td><td>2</td><td>2</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>3</td><td>+2</td><td>Artificer Specialist, The Right Tool for the Job</td><td>4</td><td>2</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>4</td><td>+2</td><td>Ability Score Improvement</td><td>4</td><td>2</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>5</td><td>+3</td><td>Artificer Specialist feature</td><td>4</td><td>2</td><td>2</td><td>4</td><td>2</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>6</td><td>+3</td><td>Tool Expertise</td><td>6</td><td>3</td><td>2</td><td>4</td><td>2</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>7</td><td>+3</td><td>Flash of Genius</td><td>6</td><td>3</td><td>2</td><td>4</td><td>3</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>8</td><td>+3</td><td>Ability Score Improvement</td><td>6</td><td>3</td><td>2</td><td>4</td><td>3</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td>9</td><td>+4</td><td>Artificer Specialist feature</td><td>6</td><td>3</td><td>2</td><td>4</td><td>3</td><td>2</td><td>-</td><td>-</td></tr>
+          <tr><td>10</td><td>+4</td><td>Magic Item Adept</td><td>8</td><td>4</td><td>3</td><td>4</td><td>3</td><td>2</td><td>-</td><td>-</td></tr>
+          <tr><td>11</td><td>+4</td><td>Spell-Storing Item</td><td>8</td><td>4</td><td>3</td><td>4</td><td>3</td><td>3</td><td>-</td><td>-</td></tr>
+          <tr><td>12</td><td>+4</td><td>Ability Score Improvement</td><td>8</td><td>4</td><td>3</td><td>4</td><td>3</td><td>3</td><td>-</td><td>-</td></tr>
+          <tr><td>13</td><td>+5</td><td>-</td><td>8</td><td>4</td><td>3</td><td>4</td><td>3</td><td>3</td><td>1</td><td>-</td></tr>
+          <tr><td>14</td><td>+5</td><td>Magic Item Savant</td><td>10</td><td>5</td><td>4</td><td>4</td><td>3</td><td>3</td><td>1</td><td>-</td></tr>
+          <tr><td>15</td><td>+5</td><td>Artificer Specialist feature</td><td>10</td><td>5</td><td>4</td><td>4</td><td>3</td><td>3</td><td>2</td><td>-</td></tr>
+          <tr><td>16</td><td>+5</td><td>Ability Score Improvement</td><td>10</td><td>5</td><td>4</td><td>4</td><td>3</td><td>3</td><td>2</td><td>-</td></tr>
+          <tr><td>17</td><td>+6</td><td>-</td><td>10</td><td>5</td><td>4</td><td>4</td><td>3</td><td>3</td><td>3</td><td>1</td></tr>
+          <tr><td>18</td><td>+6</td><td>Magic Item Master</td><td>12</td><td>6</td><td>4</td><td>4</td><td>3</td><td>3</td><td>3</td><td>1</td></tr>
+          <tr><td>19</td><td>+6</td><td>Ability Score Improvement</td><td>12</td><td>6</td><td>4</td><td>4</td><td>3</td><td>3</td><td>3</td><td>2</td></tr>
+          <tr><td>20</td><td>+6</td><td>Soul of Artifice</td><td>12</td><td>6</td><td>4</td><td>4</td><td>3</td><td>3</td><td>3</td><td>2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <small style="color:#a9b3ad;">Progresión, rasgos y magia por nivel del artificiero.</small>
+    <hr>
+    <h4 style="margin-top:0;margin-bottom:4px;color:#dff5ea;">Puntos de Golpe</h4>
+    <ul>
+      <li><strong>Dado de Golpe:</strong> 1d8 por nivel de artífice</li>
+      <li><strong>Puntos de golpe al nivel 1:</strong> 8 + tu modificador de Constitución</li>
+      <li><strong>Puntos de golpe a niveles superiores:</strong> 1d8 (o 5) + tu modificador de Constitución por cada nivel de artífice después del 1.º</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Competencias</h4>
+    <ul>
+      <li><strong>Armaduras:</strong> Armaduras ligeras, armaduras medias, escudos</li>
+      <li><strong>Armas:</strong> Armas simples</li>
+      <li><strong>Herramientas:</strong> Herramientas de ladrón, herramientas de hojalatero, un tipo de herramientas de artesano a tu elección</li>
+      <li><strong>Tiradas de salvación:</strong> Constitución, Inteligencia</li>
+      <li><strong>Habilidades:</strong> Elige dos entre Arcanos, Historia, Investigación, Medicina, Naturaleza, Percepción, Juego de manos</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Equipo inicial</h4>
+    <ul>
+      <li>Dos armas simples a tu elección</li>
+      <li>Una ballesta ligera y 20 virotes</li>
+      <li>(a) armadura de cuero tachonado o (b) cota de escamas</li>
+      <li>Herramientas de ladrón y un paquete de mazmorrero</li>
+      <li>Alternativamente, puedes comenzar con 5d4 × 10 piezas de oro para comprar tu propio equipo</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Regla Opcional: Competencia con armas de fuego</h4>
+    <p>Si tu DM utiliza las reglas para armas de fuego del Dungeon Master’s Guide y tu artífice ha estado expuesto a ellas, eres competente con su uso.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Trasteo Mágico (Magical Tinkering)</h4>
+    <p>Desde nivel 1, puedes infundir objetos no mágicos con efectos mágicos simples. Usando herramientas de ladrón o de artesano, puedes tocar un objeto Pequeño no mágico como acción y otorgarle una de las siguientes propiedades mágicas:</p>
+    <ol>
+      <li>Emitir luz brillante en un radio de 1,5 m (5 pies) y luz tenue 1,5 m adicionales.</li>
+      <li>Emitir un mensaje grabado de hasta 6 segundos al ser tocado, audible hasta 3 m (10 pies).</li>
+      <li>Emitir un olor o sonido no verbal constante (como viento, olas, canto de pájaros), perceptible hasta 3 m.</li>
+      <li>Mostrar un efecto visual estático (imagen, hasta 25 palabras, líneas o formas).</li>
+    </ol>
+    <p>Cada objeto solo puede tener un efecto a la vez. Puedes afectar varios objetos a la vez hasta un máximo igual a tu modificador de Inteligencia (mínimo 1). Si excedes el máximo, el efecto más antiguo se desvanece.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Lanzamiento de Hechizos</h4>
+    <p>Has aprendido a canalizar la magia a través de objetos, como herramientas e invenciones.</p>
+    <ul>
+      <li><strong>Requiere Herramientas:</strong> Para lanzar un hechizo con componente material ("M"), debes tener en mano herramientas de ladrón o artesano con las que seas competente. Desde nivel 2, también puedes usar cualquier objeto infundido como foco de conjuro.</li>
+      <li><strong>Trucos (Cantrips):</strong> A nivel 1, conoces dos trucos de la lista de artífice. Aprendes más al subir de nivel según la tabla de la clase. Al subir de nivel, puedes intercambiar un truco conocido por otro de la lista de artífice.</li>
+      <li><strong>Preparar y Lanzar Hechizos:</strong> La tabla del artífice indica cuántos espacios de conjuro tienes. Para lanzar un conjuro de nivel 1 o superior, debes usar un espacio de conjuro. Preparas una lista de conjuros igual a tu modificador de Inteligencia + la mitad de tu nivel de artífice (redondeado hacia abajo).</li>
+      <li>Puedes cambiar tu lista preparada al finalizar un descanso largo, pasando al menos 1 minuto por nivel de conjuro preparando cada uno.</li>
+      <li><strong>Habilidad para Conjurar:</strong> Tu habilidad de conjuro es Inteligencia. Tus CD y bonificadores son:<br>
+        • CD de salvación de conjuro: 8 + tu bonificador por competencia + tu modificador de Inteligencia<br>
+        • Modificador de ataque con conjuros: tu bonificador por competencia + tu modificador de Inteligencia
+      </li>
+      <li><strong>Lanzamiento de Rituales:</strong> Puedes lanzar como ritual cualquier conjuro de artífice que tenga la etiqueta de ritual, si lo tienes preparado.</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Infundir Objeto (Infuse Item) – Nivel 2</h4>
+    <ul>
+      <li>Infusiones conocidas: Aprendes 4 al nivel 2, y más a niveles superiores. Puedes reemplazar una al subir de nivel.</li>
+      <li>Número de objetos infundidos: Determinado por tu nivel según la tabla del artífice.</li>
+      <li>Puedes infundir objetos al finalizar un descanso largo, tocándolos. Algunos requieren objetos específicos.</li>
+      <li>Si el objeto requiere sintonización, puedes hacerlo de inmediato al infundirlo.</li>
+      <li>Solo un objeto puede llevar una infusión a la vez. Si infundes más objetos de los permitidos, la infusión más antigua termina.</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Especialización del Artífice – Nivel 3</h4>
+    <p>Elige tu tipo de artífice (subclase). Las opciones oficiales incluyen:</p>
+    <ul>
+      <li>Alquimista</li>
+      <li>Armero</li>
+      <li>Artillero</li>
+      <li>Forjaguardia (Battle Smith)</li>
+    </ul>
+    <p>Obtienes habilidades adicionales al nivel 5, 9 y 15, según la especialización.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">La Herramienta Adecuada para el Trabajo (The Right Tool for the Job) – Nivel 3</h4>
+    <p>Con herramientas en mano, puedes crear mágicamente un conjunto de herramientas de artesano que no poseas. Esto toma 1 hora, puede hacerse durante un descanso, y las herramientas desaparecen al usar esta habilidad de nuevo.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Mejora de Características (Ability Score Improvement)</h4>
+    <p>En los niveles 4, 8, 12, 16 y 19, puedes:
+      <ul>
+        <li>Aumentar una característica en +2</li>
+        <li>O aumentar dos en +1 cada una (máximo 20)</li>
+      </ul>
+    </p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Maestría con Herramientas (Tool Expertise) – Nivel 6</h4>
+    <p>Tu bonificador por competencia se duplica en cualquier tirada que use una herramienta con la que seas competente.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Destello de Genialidad (Flash of Genius) – Nivel 7</h4>
+    <p>Cuando tú o una criatura a 30 pies haga una prueba de habilidad o salvación, puedes usar tu reacción para sumar tu modificador de Inteligencia a la tirada.<br>
+    Usos por descanso largo: igual a tu modificador de Inteligencia (mínimo 1).</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Experto en Objetos Mágicos (Magic Item Adept) – Nivel 10</h4>
+    <ul>
+      <li>Puedes sintonizar hasta 4 objetos mágicos.</li>
+      <li>Fabricar objetos mágicos comunes o poco comunes te cuesta la cuarta parte del tiempo y la mitad del oro.</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Objeto con Hechizo Almacenado (Spell-Storing Item) – Nivel 11</h4>
+    <ul>
+      <li>Puedes almacenar un conjuro de 1.º o 2.º nivel (que tome 1 acción) en un objeto.</li>
+      <li>Cualquier criatura que lo sostenga puede lanzar el conjuro con tu modificador de conjuro.</li>
+      <li>Se puede usar un número de veces igual a 2 × tu modificador de Inteligencia.</li>
+      <li>Dura hasta que lo uses de nuevo para almacenar otro.</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Virtuoso de Objetos Mágicos (Magic Item Savant) – Nivel 14</h4>
+    <ul>
+      <li>Puedes sintonizar hasta 5 objetos mágicos.</li>
+      <li>Ignoras todos los requisitos de clase, raza o nivel para usar o sintonizar objetos mágicos.</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Maestro de Objetos Mágicos (Magic Item Master) – Nivel 18</h4>
+    <ul>
+      <li>Puedes sintonizar hasta 6 objetos mágicos a la vez.</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Alma del Artificio (Soul of Artifice) – Nivel 20</h4>
+    <ul>
+      <li>Ganas +1 a todas tus salvaciones por cada objeto mágico al que estés sintonizado.</li>
+      <li>Si te reducen a 0 puntos de golpe pero no mueres de inmediato, puedes usar tu reacción para finalizar una de tus infusiones y quedarte con 1 punto de golpe en lugar de 0.</li>
+    </ul>
+  </div>
+</div>`,
+      // ----- SUBCLASE -----
       subclase: `<div class="body">
-        ${document.querySelector('body').innerHTML.match(/<section id="subclase"[^>]*>[\s\S]*?<\/section>/)?.[0].replace(/<section[^>]*>|<\/section>/g,'').replace(/<div class="head">[\s\S]*?<\/div>/,'')}
-      </div>`,
+  <h4 style="margin-top:0;">🛡️ Subclase</h4>
+  <div>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Competencia en herramientas</h4>
+    <p>Al adoptar esta especialización en el nivel 3, adquieres competencia con <strong>herramientas de herrero</strong>. Si ya posees esta competencia, adquieres competencia con otro tipo de herramienta de artesano de tu elección.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Hechizos del pistolero</h4>
+    <p>A partir del nivel 3, siempre tendrás ciertos conjuros preparados tras alcanzar ciertos niveles en esta clase, como se muestra en la tabla. Estos conjuros cuentan como conjuros de artífice, pero no se incluyen en la cantidad de conjuros de artífice que prepares.</p>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:0.95em;background:rgba(27,33,32,0.92);border-radius:10px;box-shadow: 0 2px 14px rgba(47,143,91,0.09);border:1px solid #222e26;">
+        <thead>
+          <tr style="background:rgba(47,143,91,0.13);color:#dff5ea;">
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel de Artífice</th>
+            <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Conjuros preparados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>3º</td><td>Nube de niebla, Sueño</td></tr>
+          <tr><td>5º</td><td>Romper, Silencio</td></tr>
+          <tr><td>9º</td><td>Luz del día, Nube apestosa</td></tr>
+          <tr><td>13º</td><td>Libertad de movimiento, Localizar criatura</td></tr>
+          <tr><td>17º</td><td>Nube asesina, Telequinesis</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Armería</h4>
+    <p>A partir del nivel 3, el tiempo que has pasado experimentando y explorando los límites de la pólvora negra y la metalurgia te ha revelado el conocimiento de la fabricación de armas de fuego, además de hacerte competente en su uso.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Sigil Six Shooter</h4>
+    <p>A nivel 3, forjas un revólver especial en el que puedes grabar sigilos mágicos que otorgan habilidades especiales que alteran el funcionamiento del revólver o la munición que dispara. Al terminar un descanso prolongado, puedes usar tus herramientas de manitas para grabar mágicamente en tu revólver una cantidad de sigilos igual a tu modificador de Inteligencia (mínimo uno). Cada sigilo solo se puede grabar una vez en tu revólver y se activa o desactiva a voluntad, como acción gratuita, al empuñarlo.</p>
+    <ul>
+      <li>Puedes elegir tres de los siguientes sigilos en el nivel 3, y otro en los niveles 6, 9, 12, 15 y 18.</li>
+      <li>Al obtener un nuevo sigilo, puedes reemplazar uno que conozcas por otro de nivel correspondiente.</li>
+      <li>Mientras tu revólver tenga sigilos, puedes usarlo como foco de hechizo para tus hechizos de artífice.</li>
+      <li>Si pierdes o destruyen tu revólver, puedes forjarlo nuevamente mágicamente al final de un largo descanso usando herramientas de herrero.</li>
+    </ul>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Ataque extra</h4>
+    <p>A partir del nivel 5, puedes atacar dos veces, en lugar de una, siempre que realices la acción de Ataque en tu turno.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Mente apresurada</h4>
+    <p>A partir del nivel 9, al inicio de tu turno, puedes invocar un estado de hiperconciencia que te otorga los siguientes beneficios hasta el comienzo de tu siguiente turno:</p>
+    <ul>
+      <li>Durante tu acción de Ataque, puedes realizar un ataque adicional con tu revólver.</li>
+      <li>Como reacción, puedes tomar la acción de esquivar.</li>
+      <li>Como acción adicional, puedes realizar la acción de Carrera o Desengancharse.</li>
+      <li>Puedes añadir tu modificador de Inteligencia (mínimo uno) a las tiradas de daño de tu revólver y a tus tiradas de salvación de Destreza.</li>
+    </ul>
+    <p>Esta característica dura hasta el comienzo de tu siguiente turno. Puedes usarla tantas veces como tu modificador de Inteligencia (mínimo una vez). Recuperas todos los usos gastados al terminar un descanso prolongado.</p>
+    <h4 style="margin-bottom:4px;color:#dff5ea;">Santo del Sigilo</h4>
+    <p>A partir del nivel 15, como acción adicional, puedes liberar uno o más sigilos, borrándolos así de tu revólver, para realizar una de las siguientes acciones:</p>
+    <ul>
+      <li>Cúrate a ti mismo o a un aliado (con un toque) hasta tu nivel de clase + tu modificador de Inteligencia.</li>
+      <li>Duplica el dado de daño del arma de tu revólver hasta el final de tu turno.</li>
+      <li>Una vez por cada descanso prolongado, puedes liberar una cantidad de sigilos igual al nivel de un espacio de conjuro gastado. Una vez hecho esto, recuperas ese espacio de conjuro gastado.</li>
+    </ul>
+    <hr>
+    <h4 style="margin-top:0;color:#dff5ea;">Sigilos mágicos del revólver</h4>
+    <ol>
+      <li>
+        <strong>Sigilo de perforación de armadura</strong><br>
+        Tu munición inflige daño de fuerza y recibe una bonificación para impactar igual a tu modificador de Inteligencia (mínimo uno).
+      </li>
+      <li>
+        <strong>Sigilo de envoltura elemental</strong><br>
+        Permite elegir tipo de daño elemental (frío, fuego, rayo o trueno), aumentando el daño en 1d8 del elemento elegido.
+      </li>
+      <li>
+        <strong>Sigilo de Explosión</strong><br>
+        La munición explota en el punto de contacto, propagando daño en un radio de 3 m (aumenta a 6 m en nivel 12). Las criaturas deben salvar Destreza contra tu CD de conjuros.
+      </li>
+      <li>
+        <strong>Sigilo de Dispersión</strong><br>
+        La munición se astilla en un cono de 4,5 m (9 m en nivel 9), infligiendo daño a todas las criaturas atrapadas en el área.
+      </li>
+      <li>
+        <strong>Sigilo de herida penetrante</strong><br>
+        Golpes críticos con tu revólver en resultado de 19 o 20.
+      </li>
+      <li>
+        <strong>Sigilo de llamas púrpuras</strong><br>
+        Impactar con éxito ilumina a la criatura como el hechizo fuego feérico, durante asaltos igual a tu modificador de Inteligencia (requiere Concentración).
+      </li>
+      <li>
+        <strong>Sigilo de la Nube Asesina</strong><br>
+        Munición expulsa una nube venenosa, lanzando el hechizo muerte de nubes (requiere espacio de conjuro de nivel 5 y Concentración).
+      </li>
+      <li>
+        <strong>Sigilo de la Nube Asfixiante</strong><br>
+        Munición expulsa una nube nociva, lanza el conjuro nube pestilente (requiere espacio de conjuro de nivel 3 y Concentración).
+      </li>
+      <li>
+        <strong>Sigilo del macho cabrío</strong><br>
+        Los disparos pueden empujar y tumbar a los objetivos tras una salvación de Fuerza fallida.
+      </li>
+      <li>
+        <strong>Sigilo de desenfunde rápido</strong><br>
+        Añade tu modificador de Inteligencia a iniciativa si usas el revólver en el primer ataque del turno.
+      </li>
+      <li>
+        <strong>Sigilo de puntería exquisita</strong><br>
+        Gasta un espacio de conjuro para sumar 1d4 adicional a las tiradas de impacto durante 1 minuto.
+      </li>
+      <li>
+        <strong>Sigilo del ojo de águila</strong><br>
+        Elimina la desventaja por larga distancia con el revólver.
+      </li>
+      <li>
+        <strong>Sigilo de asombro</strong><br>
+        Tener el revólver a la vista te da ventaja en pruebas de Carisma contra criaturas que puedan verlo.
+      </li>
+      <li>
+        <strong>Sigilo de falsa apariencia</strong><br>
+        Permite transformar el revólver en otro objeto (anillo, bastón, etc.) y viceversa. Al revertir durante combate, el primer ataque tiene ventaja y 2d6 extra de daño sorpresa.
+      </li>
+      <li>
+        <strong>Sigilo de Pall</strong><br>
+        Munición expulsa humo oscuro, imitando nube de niebla de nivel 1 durante asaltos igual a tu modificador de Inteligencia (requiere Concentración).
+      </li>
+      <li>
+        <strong>Sigilo del sueño</strong><br>
+        Permite lanzar el hechizo sueño sobre una criatura gastando espacio de conjuro elegido, tras un impacto exitoso.
+      </li>
+      <li>
+        <strong>Sigilo de Disparo Elevado</strong><br>
+        Duplica el alcance del revólver.
+      </li>
+      <li>
+        <strong>Sigilo del Silencio</strong><br>
+        El revólver no emite sonido al disparar ni al impactar, pero no silencia el área.
+      </li>
+      <li>
+        <strong>Sigilo del Portador de Luz</strong><br>
+        Munición imbuidos en luz diurna, ardiendo brillantemente durante rondas igual a tu modificador de Inteligencia.
+      </li>
+      <li>
+        <strong>Sigilo del asedio</strong><br>
+        El arma inflige el doble de daño a objetos inanimados (puertas, cofres, paredes, etc.).
+      </li>
+    </ol>
+    <small style="color:#a9b3ad;">Ordenados de mayor a menor impacto potencial para un pistolero artífice en combate y utilidad.</small>
+  </div>
+</div>`,
+      // ----- HECHIZOS -----
       hechizos: `<div class="body">
-        ${document.querySelector('body').innerHTML.match(/<section id="hechizos"[^>]*>[\s\S]*?<\/section>/)?.[0].replace(/<section[^>]*>|<\/section>/g,'').replace(/<div class="head">[\s\S]*?<\/div>/,'')}
-      </div>`,
+  <h4 style="margin-top:0;">📜 Hechizos de artificiero</h4>
+  <hr>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Cantrips</h4>
+  <ul style="margin-top:0;">
+    <li><strong>Acid Splash:</strong> Lanza un salpicón de ácido que daña a un objetivo (1d6 ácido).</li>
+    <li><strong>Booming Blade:</strong> Golpea con arma, daño adicional si se mueve (1d8 + fuerza/modificador).</li>
+    <li><strong>Create Bonfire:</strong> Crea un fuego que daña a quien esté dentro (1d8 fuego por turno).</li>
+    <li><strong>Dancing Lights:</strong> Crea hasta 4 orbes de luz para iluminar o distraer.</li>
+    <li><strong>Fire Bolt:</strong> Proyectil de fuego a distancia (1d10 fuego).</li>
+    <li><strong>Frostbite:</strong> Daño frío y desventaja en la siguiente tirada de ataque (1d6 frío).</li>
+    <li><strong>Green-Flame Blade:</strong> Ataque cuerpo a cuerpo que provoca daño extra a otro objetivo cercano (1d8 + fuego).</li>
+    <li><strong>Guidance:</strong> Mejora un chequeo de habilidad (+1d4).</li>
+    <li><strong>Light:</strong> Ilumina un objeto, creando luz a 20 pies.</li>
+    <li><strong>Lightning Lure:</strong> Atrae enemigos cercanos y daña (1d8 eléctrico).</li>
+    <li><strong>Mage Hand:</strong> Crea una mano mágica para manipular objetos a distancia.</li>
+    <li><strong>Magic Stone:</strong> Prepara piedras para lanzar con daño extra (1d6 contundente).</li>
+    <li><strong>Mending:</strong> Repara un objeto pequeño.</li>
+    <li><strong>Message:</strong> Envía mensaje hablado a distancia.</li>
+    <li><strong>Poison Spray:</strong> Nube de veneno que daña (1d12 veneno).</li>
+    <li><strong>Prestidigitation:</strong> Efectos menores de trucos, luces, olores o limpieza.</li>
+    <li><strong>Ray of Frost:</strong> Rayo de frío a distancia (1d8 frío).</li>
+    <li><strong>Resistance:</strong> Mejora temporal de resistencia a daño de un aliado.</li>
+    <li><strong>Shocking Grasp:</strong> Daño eléctrico a un objetivo cercano (1d8 eléctrico).</li>
+    <li><strong>Spare the Dying:</strong> Evita que un aliado caiga a 0 puntos de golpe.</li>
+    <li><strong>Sword Burst:</strong> Daño a enemigos alrededor al usar un ataque (1d6 fuerza).</li>
+    <li><strong>Thorn Whip:</strong> Golpea a distancia con lianas, tira del objetivo (1d6 perforante).</li>
+    <li><strong>Thunderclap:</strong> Onda sonora que daña y puede empujar (1d6 trueno).</li>
+  </ul>
+  <hr>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Nivel 1</h4>
+  <ul style="margin-top:0;">
+    <li><strong>Absorb Elements:</strong> Absorbe daño elemental recibido y añade un ataque de ese tipo al siguiente golpe.</li>
+    <li><strong>Alarm:</strong> Crea un área que alerta si alguien entra.</li>
+    <li><strong>Catapult:</strong> Lanza un objeto a gran velocidad que daña (1d8 contundente).</li>
+    <li><strong>Cure Wounds:</strong> Cura puntos de golpe a un aliado (1d8 + modificador).</li>
+    <li><strong>Detect Magic:</strong> Detecta magia en el área o en objetos.</li>
+    <li><strong>Disguise Self:</strong> Cambia temporalmente tu apariencia.</li>
+    <li><strong>Expeditious Retreat:</strong> Aumenta tu velocidad de movimiento por 10 minutos.</li>
+    <li><strong>Faerie Fire:</strong> Marca enemigos, otorgando ventaja a los ataques contra ellos.</li>
+    <li><strong>False Life:</strong> Gana puntos de golpe temporales para protegerte.</li>
+    <li><strong>Feather Fall:</strong> Reduce la velocidad de caída, evitando daño por caída.</li>
+    <li><strong>Grease:</strong> Crea un área resbaladiza que puede hacer caer a los enemigos (tiran DEX).</li>
+    <li><strong>Identify:</strong> Conocer propiedades mágicas de un objeto.</li>
+    <li><strong>Jump:</strong> Triplica la distancia de salto de un objetivo.</li>
+    <li><strong>Longstrider:</strong> Aumenta la velocidad de movimiento de un aliado.</li>
+    <li><strong>Purify Food and Drink:</strong> Limpia comida y bebida, eliminando venenos o enfermedades.</li>
+    <li><strong>Sanctuary:</strong> Protege a un aliado, obligando a los enemigos a pasar una tirada de salvación para atacarlo.</li>
+    <li><strong>Snare:</strong> Crea una trampa mágica que inmoviliza a quien pise la zona (DEX Save).</li>
+    <li><strong>Tasha’s Caustic Brew:</strong> Área de ácido que daña a enemigos (1d6 ácido por turno, DEX Save).</li>
+  </ul>
+  <hr>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Nivel 2</h4>
+  <ul style="margin-top:0;">
+    <li><strong>Aid:</strong> Aumenta puntos de golpe máximos y actuales de aliados cercanos.</li>
+    <li><strong>Air Bubble:</strong> Protege a un objetivo con una burbuja de aire, útil bajo agua.</li>
+    <li><strong>Alter Self:</strong> Cambia temporalmente tu forma o rasgos físicos.</li>
+    <li><strong>Arcane Lock:</strong> Bloquea una puerta u objeto mágicamente.</li>
+    <li><strong>Blur:</strong> Difumina tu figura, dificultando que te golpeen.</li>
+    <li><strong>Continual Flame:</strong> Crea una llama permanente que no consume combustible.</li>
+    <li><strong>Darkvision:</strong> Permite ver en la oscuridad a un objetivo.</li>
+    <li><strong>Enhance Ability:</strong> Mejora temporalmente una habilidad de un aliado.</li>
+    <li><strong>Enlarge/Reduce:</strong> Agranda o reduce un objetivo, aumentando o disminuyendo fuerza/tamaño.</li>
+    <li><strong>Heat Metal:</strong> Calienta un objeto metálico causando daño (2d8 fuego) y dificultad para usarlo.</li>
+    <li><strong>Invisibility:</strong> Vuelve invisible a un objetivo mientras dure la concentración.</li>
+    <li><strong>Kinetic Jaunt:</strong> Aumenta velocidad de movimiento temporalmente.</li>
+    <li><strong>Lesser Restoration:</strong> Cura una condición negativa como veneno o parálisis.</li>
+    <li><strong>Levitate:</strong> Hace flotar a un objetivo verticalmente.</li>
+    <li><strong>Magic Mouth:</strong> Crea una boca mágica que habla cuando se cumplen condiciones.</li>
+    <li><strong>Magic Weapon:</strong> Convierte un arma en mágica, mejorando daño y ataques.</li>
+    <li><strong>Protection from Poison:</strong> Protege a un objetivo de veneno o efectos de envenenamiento.</li>
+    <li><strong>Pyrotechnics:</strong> Crea explosiones de fuego que pueden cegar enemigos (CON Save).</li>
+    <li><strong>Rope Trick:</strong> Crea un espacio oculto en el aire dentro de una cuerda mágica.</li>
+    <li><strong>See Invisibility:</strong> Permite ver criaturas o objetos invisibles.</li>
+    <li><strong>Skywrite:</strong> Escribe mensajes visibles en el cielo por un tiempo limitado.</li>
+    <li><strong>Spider Climb:</strong> Permite trepar paredes y techos como una araña.</li>
+    <li><strong>Vortex Warp:</strong> Teletransporta un objetivo a otra ubicación cercana (CON Save).</li>
+    <li><strong>Web:</strong> Crea una telaraña que puede inmovilizar enemigos (DEX Save).</li>
+  </ul>
+  <hr>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Nivel 3</h4>
+  <ul style="margin-top:0;">
+    <li><strong>Ashardalon's Stride:</strong> Aumenta velocidad y deja fuego tras moverte.</li>
+    <li><strong>Blink:</strong> Te teletransportas aleatoriamente entre el plano material y etéreo durante un turno.</li>
+    <li><strong>Catnap:</strong> Permite a varios aliados descansar brevemente y recuperar dados de golpe.</li>
+    <li><strong>Create Food and Water:</strong> Crea comida y agua suficiente para varias personas.</li>
+    <li><strong>Dispel Magic:</strong> Anula efectos mágicos en un objetivo o área.</li>
+    <li><strong>Elemental Weapon:</strong> Convierte un arma en mágica y añade daño elemental (1d4 de ácido, fuego, frío, etc.).</li>
+    <li><strong>Flame Arrows:</strong> Encanta flechas para que hagan daño de fuego adicional.</li>
+    <li><strong>Fly:</strong> Permite a un objetivo volar por la duración del hechizo.</li>
+    <li><strong>Glyph of Warding:</strong> Crea un sello que explota o aplica un efecto al activarse (1d6 de ácido o similar).</li>
+    <li><strong>Haste:</strong> Aumenta velocidad, da acción adicional y mejora AC de un aliado.</li>
+    <li><strong>Intellect Fortress:</strong> Crea un área donde los aliados reciben defensa mental extra.</li>
+    <li><strong>Protection from Energy:</strong> Protege a un objetivo de un tipo específico de energía o daño elemental.</li>
+    <li><strong>Revivify:</strong> Resucita a una criatura muerta hace menos de un minuto.</li>
+    <li><strong>Tiny Servant:</strong> Anima un objeto pequeño para que actúe como sirviente.</li>
+    <li><strong>Water Breathing:</strong> Permite respirar bajo el agua a un grupo de criaturas.</li>
+    <li><strong>Water Walk:</strong> Permite caminar sobre agua, barro o superficies líquidas.</li>
+  </ul>
+  <hr>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Nivel 4</h4>
+  <ul style="margin-top:0;">
+    <li><strong>Arcane Eye:</strong> Crea un ojo flotante que explora y ve a distancia mientras concentras.</li>
+    <li><strong>Elemental Bane:</strong> Marca a un enemigo para que reciba daño extra de un tipo elemental (1d6).</li>
+    <li><strong>Fabricate:</strong> Transforma materia en objetos construidos, como madera o metal, a gran escala.</li>
+    <li><strong>Freedom of Movement:</strong> El objetivo se mueve libremente sin restricciones físicas ni mágicas.</li>
+    <li><strong>Leomund's Secret Chest:</strong> Guarda un objeto en un cofre extradimensional seguro.</li>
+    <li><strong>Mordenkainen's Faithful Hound:</strong> Invoca un perro mágico que vigila y ataca intrusos (1d8 de daño o similar).</li>
+    <li><strong>Mordenkainen's Private Sanctum:</strong> Protege un área de intrusiones mágicas o físicas.</li>
+    <li><strong>Otiluke's Resilient Sphere:</strong> Encierra un objetivo en una esfera impenetrable.</li>
+    <li><strong>Stone Shape:</strong> Moldea piedra a voluntad, creando pasajes, puertas u objetos.</li>
+    <li><strong>Stoneskin:</strong> Vuelve la piel del objetivo resistente al daño físico.</li>
+    <li><strong>Summon Construct:</strong> Invoca una criatura constructo para luchar o realizar tareas.</li>
+  </ul>
+  <hr>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Nivel 5</h4>
+  <ul style="margin-top:0;">
+    <li><strong>Animate Objects:</strong> Da vida a objetos inanimados para que luchen o actúen bajo tu control.</li>
+    <li><strong>Bigby's Hand:</strong> Invoca una mano gigante mágica que puede atacar, empujar o bloquear (1d8+ o efectos de fuerza).</li>
+    <li><strong>Create Spelljamming Helm:</strong> Crea un casco mágico que permite pilotar naves mágicas.</li>
+    <li><strong>Creation:</strong> Materializa objetos de manera ilusoria o real temporalmente (depende del material).</li>
+    <li><strong>Greater Restoration:</strong> Restaura salud, condiciones negativas o niveles de agotamiento del objetivo.</li>
+    <li><strong>Skill Empowerment:</strong> Aumenta la eficacia de una habilidad o destreza de un aliado temporalmente.</li>
+    <li><strong>Transmute Rock:</strong> Transforma roca en otro tipo de material o terreno (daño bludgeoning a enemigos cercanos, 4d6 aprox.).</li>
+    <li><strong>Wall of Stone:</strong> Crea un muro sólido de piedra para bloquear, proteger o dividir el terreno.</li>
+  </ul>
+</div>`,
+      // ----- INFUSIONES -----
       infusiones: `<div class="body">
-        ${document.querySelector('body').innerHTML.match(/<section id="infusiones"[^>]*>[\s\S]*?<\/section>/)?.[0].replace(/<section[^>]*>|<\/section>/g,'').replace(/<div class="head">[\s\S]*?<\/div>/,'')}
-      </div>`,
+  <h4 style="margin-top:0;">🧩 Lista de Infusiones</h4>
+  <ul style="margin-top:0;">
+    <li>
+      <strong>Armadura de propulsión arcana</strong> (nivel 14, requiere sintonización)<br>
+      Armadura que aumenta velocidad, otorga guanteletes mágicos lanzables (1d8 fuerza), reemplaza extremidades faltantes y no se puede quitar contra la voluntad del usuario.
+    </li>
+    <li>
+      <strong>Armadura de fuerza mágica</strong> (requiere sintonización)<br>
+      Armadura con 6 cargas para mejorar tiradas de Fuerza o evitar ser derribado. Recupera 1d6 cargas al amanecer.
+    </li>
+    <li>
+      <strong>Armadura de herramientas (UA)</strong><br>
+      Permite integrar herramientas en la armadura por 8 horas, añadiendo tu modificador de INT a pruebas con la herramienta integrada.
+    </li>
+    <li>
+      <strong>Botas del Camino Sinuoso</strong> (nivel 6, requiere sintonización)<br>
+      Permite teletransportarse como acción adicional a un espacio ocupado previamente en el turno.
+    </li>
+    <li>
+      <strong>Enfoque arcano mejorado</strong> (requiere sintonización)<br>
+      Vara, bastón o varita que otorga +1/+2 a ataques de conjuro e ignora media cobertura.
+    </li>
+    <li>
+      <strong>Defensa mejorada</strong><br>
+      Armadura o escudo que da +1/+2 a la CA mientras se use o maneje el objeto infundido.
+    </li>
+    <li>
+      <strong>Arma mejorada</strong><br>
+      Arma simple o marcial mágica que da +1/+2 a ataque y daño.
+    </li>
+    <li>
+      <strong>Timón de la Conciencia</strong> (nivel 10, requiere sintonización)<br>
+      Casco que da ventaja en iniciativa y previene ser sorprendido.
+    </li>
+    <li>
+      <strong>Afilador de mentes</strong><br>
+      Armadura o túnica con 4 cargas para evitar perder concentración. Recupera 1d4 cargas al amanecer.
+    </li>
+    <li>
+      <strong>Arma radiante</strong> (nivel 6, requiere sintonización)<br>
+      Arma mágica con +1 a ataque/daño y luz brillante. 4 cargas para cegar al atacante tras recibir daño. Recupera 1d4 cargas al amanecer.
+    </li>
+    <li>
+      <strong>Disparo repetido</strong> (requiere sintonización)<br>
+      Arma de munición mágica con +1 a ataque/daño, ignora la propiedad de carga y produce munición mágica automáticamente.
+    </li>
+    <li>
+      <strong>Escudo de repulsión</strong> (nivel 6, requiere sintonización)<br>
+      Escudo con +1 CA y 4 cargas para empujar a atacante tras recibir golpe. Recupera 1d4 cargas al amanecer.
+    </li>
+    <li>
+      <strong>Armadura resistente</strong> (nivel 6, requiere sintonización)<br>
+      Armadura que da resistencia a un tipo de daño elegido al infundirla.
+    </li>
+    <li>
+      <strong>Arma que regresa</strong><br>
+      Arma arrojadiza mágica con +1 a ataque/daño, regresa a la mano tras atacar.
+    </li>
+    <li>
+      <strong>Anillo reabastecedor de hechizos</strong> (nivel 6, requiere sintonización)<br>
+      Permite recuperar un espacio de conjuro de nivel 3 o inferior como acción. Usable una vez por día.
+    </li>
+  </ul>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Objetos mágicos replicables</h4>
+  <p>Puedes aprender esta infusión varias veces, eligiendo cada vez un objeto mágico de la siguiente tabla, según tu nivel de artificiero. Requiere consultar la Guía del Dungeon Master o Xanathar para detalles de cada objeto.</p>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:0.95em;background:rgba(27,33,32,0.92);border-radius:10px;box-shadow: 0 2px 14px rgba(47,143,91,0.09);border:1px solid #222e26;">
+    <thead>
+      <tr style="background:rgba(47,143,91,0.13);color:#dff5ea;">
+        <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Nivel</th>
+        <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Objeto mágico</th>
+        <th style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Sintonización</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Nivel 2 -->
+      <tr><td rowspan="8" style="vertical-align:top;">2</td><td>Jarra de alquimia</td><td>No</td></tr>
+      <tr><td>Bolsa de contención</td><td>No</td></tr>
+      <tr><td>Gorra de Respiración Acuática</td><td>No</td></tr>
+      <tr><td>Gafas de noche</td><td>No</td></tr>
+      <tr><td>Cuerda de escalada</td><td>No</td></tr>
+      <tr><td>Enviando piedras</td><td>No</td></tr>
+      <tr><td>Varita de detección mágica</td><td>No</td></tr>
+      <tr><td>Varita de los secretos</td><td>No</td></tr>
+      <!-- Nivel 6 -->
+      <tr><td rowspan="8" style="vertical-align:top;">6</td><td>Botas de elfos</td><td>No</td></tr>
+      <tr><td>Capa de los elfos</td><td>Sí</td></tr>
+      <tr><td>Capa de la manta raya</td><td>No</td></tr>
+      <tr><td>Ojos de encanto</td><td>Sí</td></tr>
+      <tr><td>Guantes de robo</td><td>No</td></tr>
+      <tr><td>Linterna de la Revelación</td><td>No</td></tr>
+      <tr><td>Tubos de inquietante</td><td>No</td></tr>
+      <tr><td>Caminata por el Anillo del Agua</td><td>No</td></tr>
+      <!-- Nivel 10 -->
+      <tr><td rowspan="21" style="vertical-align:top;">10</td><td>Botas de zancada y salto</td><td>Sí</td></tr>
+      <tr><td>Botas de las Tierras Invernales</td><td>Sí</td></tr>
+      <tr><td>Brazales de tiro con arco</td><td>Sí</td></tr>
+      <tr><td>Broche de blindaje</td><td>Sí</td></tr>
+      <tr><td>Capa de protección</td><td>Sí</td></tr>
+      <tr><td>Ojos del águila</td><td>Sí</td></tr>
+      <tr><td>Guanteletes del poder del ogro</td><td>Sí</td></tr>
+      <tr><td>Guantes de trampa de misiles</td><td>Sí</td></tr>
+      <tr><td>Guantes de Natación y Escalada</td><td>Sí</td></tr>
+      <tr><td>Sombrero de disfraz</td><td>Sí</td></tr>
+      <tr><td>Diadema del intelecto</td><td>Sí</td></tr>
+      <tr><td>Yelmo de la telepatía</td><td>Sí</td></tr>
+      <tr><td>Medallón de Pensamientos</td><td>Sí</td></tr>
+      <tr><td>Collar de Adaptación</td><td>Sí</td></tr>
+      <tr><td>Periapto del cierre de la herida</td><td>Sí</td></tr>
+      <tr><td>Tuberías de las alcantarillas</td><td>Sí</td></tr>
+      <tr><td>Carcaj de Ehlonna</td><td>No</td></tr>
+      <tr><td>Anillo de salto</td><td>Sí</td></tr>
+      <tr><td>Anillo de protección mental</td><td>Sí</td></tr>
+      <tr><td>Zapatillas de araña trepadoras</td><td>Sí</td></tr>
+      <tr><td>Ventilando pulmones (Eberron)</td><td>Sí</td></tr>
+      <tr><td>Botas aladas</td><td>Sí</td></tr>
+      <!-- Nivel 14 -->
+      <tr><td rowspan="14" style="vertical-align:top;">14</td><td>Amuleto de la salud</td><td>Sí</td></tr>
+      <tr><td>Brazo de propulsión arcano (Eberron)</td><td>Sí</td></tr>
+      <tr><td>Cinturón de fuerza de gigante de la colina</td><td>Sí</td></tr>
+      <tr><td>Botas de levitación</td><td>Sí</td></tr>
+      <tr><td>Botas de velocidad</td><td>Sí</td></tr>
+      <tr><td>Brazales de defensa</td><td>Sí</td></tr>
+      <tr><td>Capa del Murciélago</td><td>Sí</td></tr>
+      <tr><td>Grilletes dimensionales</td><td>No</td></tr>
+      <tr><td>Gema de la visión</td><td>Sí</td></tr>
+      <tr><td>Cuerno de Explosión</td><td>No</td></tr>
+      <tr><td>Anillo de acción libre</td><td>Sí</td></tr>
+      <tr><td>Anillo de protección</td><td>Sí</td></tr>
+      <tr><td>Anillo del Carnero</td><td>Sí</td></tr>
+    </tbody>
+  </table>
+  <small style="color:#a9b3ad;">Consulta la guía del Dungeon Master para detalles de cada objeto. Requiere cumplir el nivel indicado para replicar cada uno.</small>
+</div>`,
+      // ----- SIRVIENTE HOMÚNCULO -----
       homunculo: `<div class="body">
-        ${document.querySelector('body').innerHTML.match(/<section id="infusiones"[^>]*>[\s\S]*?<\/section>/)?.[0].replace(/<section[^>]*>|<\/section>/g,'').replace(/<div class="head">[\s\S]*?<\/div>/,'').match(/<details>[\s\S]*?Sirviente Homúnculo[\s\S]*?<\/details>/)?.[0]}
-      </div>`
+  <h4 style="margin-top:0;color:#dff5ea;">Sirviente Homúnculo</h4>
+  <p>
+    <strong>Objeto:</strong> Una gema o cristal de al menos 100 piezas de oro.<br>
+    Aprendes métodos intrincados para crear mágicamente un homúnculo especial que te sirve. El objeto infundido sirve como el corazón de la criatura, alrededor del cual su cuerpo se forma instantáneamente.<br>
+    Tú determinas el aspecto del homúnculo (algunos prefieren aves mecánicas, viales alados o calderos animados en miniatura).<br>
+    El homúnculo es amistoso contigo y tus compañeros y obedece tus órdenes. Consulta el bloque de estadísticas más abajo, que utiliza tu bonificador por competencia (PB) en varios lugares.<br>
+    En combate, actúa en tu misma iniciativa, justo después de ti. Puede moverse y usar su reacción por sí mismo, pero solo realiza la acción de Esquivar, a no ser que uses una acción adicional para ordenarle otra acción. Si quedas incapacitado, el homúnculo puede actuar por sí mismo.<br>
+    El homúnculo recupera 2d6 puntos de golpe si se le lanza el conjuro Remendar. Si tú o el homúnculo mueren, desaparece y deja su corazón en su espacio.
+  </p>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Bloque de estadísticas del Sirviente Homúnculo</h4>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:0.95em;background:rgba(27,33,32,0.92);border-radius:10px;box-shadow: 0 2px 14px rgba(47,143,91,0.09);border:1px solid #222e26;">
+    <thead>
+      <tr style="background:rgba(47,143,91,0.13);color:#dff5ea;">
+        <th colspan="2" style="padding:7px 8px; border-bottom:1px solid #2f8f5b;">Sirviente Homúnculo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Tamaño</strong></td>
+        <td>Constructo diminuto</td>
+      </tr>
+      <tr>
+        <td><strong>Clase de Armadura</strong></td>
+        <td>13 (armadura natural)</td>
+      </tr>
+      <tr>
+        <td><strong>Puntos de golpe</strong></td>
+        <td>1 + tu modificador de Inteligencia + tu nivel de artificiero (dados de golpe: d4 igual a tu nivel de artificiero)</td>
+      </tr>
+      <tr>
+        <td><strong>Velocidad</strong></td>
+        <td>6 m, vuelo 9 m</td>
+      </tr>
+      <tr>
+        <td><strong>Estadísticas</strong></td>
+        <td>
+          <strong>FUE</strong> 4 (-3), <strong>DES</strong> 15 (+2), <strong>CON</strong> 12 (+1), <strong>INT</strong> 10 (+0), <strong>SAB</strong> 10 (+0), <strong>CAR</strong> 7 (−2)
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Salvaciones</strong></td>
+        <td>DES +2 + PB</td>
+      </tr>
+      <tr>
+        <td><strong>Habilidades</strong></td>
+        <td>Percepción +0 + PB x2, Sigilo +2 + PB</td>
+      </tr>
+      <tr>
+        <td><strong>Inmunidad a daño</strong></td>
+        <td>Veneno</td>
+      </tr>
+      <tr>
+        <td><strong>Inmunidad a condiciones</strong></td>
+        <td>Agotamiento, envenenado</td>
+      </tr>
+      <tr>
+        <td><strong>Sentidos</strong></td>
+        <td>Visión en la oscuridad 18 m, Percepción pasiva 10 + (PB x2)</td>
+      </tr>
+      <tr>
+        <td><strong>Idiomas</strong></td>
+        <td>Entiende los idiomas que hablas</td>
+      </tr>
+      <tr>
+        <td><strong>Desafío</strong></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><strong>Bonificador por competencia (PB)</strong></td>
+        <td>Igual al tuyo</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Rasgos</h4>
+  <ul>
+    <li><strong>Evación:</strong> Si el homúnculo es sometido a un efecto que le permite hacer una tirada de salvación de Destreza para recibir solo la mitad del daño, en caso de éxito no recibe daño, y si falla recibe solo la mitad. No puede usar este rasgo si está incapacitado.</li>
+  </ul>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Acciones</h4>
+  <ul>
+    <li><strong>Golpe de fuerza (Force Strike):</strong> Ataque a distancia con arma: usa tu modificador de ataque de conjuro para impactar, alcance 9 m, un objetivo visible. Daño: 1d4 + PB de fuerza.</li>
+  </ul>
+  <h4 style="margin-bottom:4px;color:#dff5ea;">Reacciones</h4>
+  <ul>
+    <li><strong>Canalizar magia:</strong> El homúnculo puede entregar un conjuro que lances y tenga alcance de toque, si está a menos de 36 m de ti.</li>
+  </ul>
+</div>`
     };
     function openModal(key) {
       document.getElementById('modalContent').innerHTML = modalContents[key];
